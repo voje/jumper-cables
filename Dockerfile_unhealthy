@@ -1,0 +1,10 @@
+FROM golang:alpine3.12
+WORKDIR /app
+COPY unhealthy.go .
+RUN go build unhealthy.go
+
+RUN apk add curl
+
+HEALTHCHECK --interval=5s --timeout=3s CMD curl 127.0.0.1:8000 | grep -q 'button' || exit 1
+
+    CMD ["/app/unhealthy"]
